@@ -1,0 +1,30 @@
+version: '3.7'
+
+services:
+  tb_service:
+    build: .   #указываем директорию, где докерфайл
+    ports: #порт, на котором мы сейчас все разворачиваем
+      - 8001:8000
+    environment: #все, что относится к нашей базе данных
+      - DB_HOST=localhost
+      - DB_PORT=5432
+      - DB_NAME=TeamBuilder
+      - DB_USER=postgres
+      - DB_PASS=abobaPOST
+    depends_on: #"зависимость" от минио, пока минио не запустится, не запустится и сам сервис
+      - minio
+  
+  minio:
+    image: minio/minio #берем готовый образ под минио
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes: #область выделяемой памяти
+      - minio_storage:/data
+    environment:
+      MINIO_ROOT_USER: admin
+      MINIO_ROOT_PASSWORD: admin123
+    command: server --console-address ":9001" /data #команда для запуска минио
+
+volumes: 
+  minio_storage: {}

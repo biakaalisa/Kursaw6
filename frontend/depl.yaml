@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: tbfrontpod
+spec:
+  selector:
+    matchLabels:
+      app: tbfrontpod
+  template:
+    metadata:
+      labels:
+        app: tbfrontpod
+    spec:
+      containers:
+        - name: tbfront
+          imagePullPolicy: Never
+          image: tbfront:latest
+          resources:
+            limits:
+              memory: "1000Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
